@@ -1,0 +1,17 @@
+[package]
+name = "kraxn"
+version = "0.0.0"
+authors = ["Stefan Kroboth <stefan.kroboth@gmail.com>"]
+
+[[bin]]
+name = "kraxn-server"
+path = "server/src/main.rs"
+
+[[bin]]
+name = "kraxn-client"
+path = "client/src/main.rs"
+
+[dependencies]
+
+[workspace]
+members = ["server", "client"]

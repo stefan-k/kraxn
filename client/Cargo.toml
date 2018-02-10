@@ -1,0 +1,6 @@
+[package]
+name = "kraxn-client"
+version = "0.0.0"
+authors = ["Stefan Kroboth <stefan.kroboth@gmail.com>"]
+
+[dependencies]
