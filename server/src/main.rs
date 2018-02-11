@@ -17,31 +17,39 @@ extern crate futures;
 extern crate tokio;
 extern crate tokio_io;
 
-use tokio::net::TcpListener;
+use tokio::net::{TcpListener, TcpStream};
 use tokio::executor::current_thread;
 use tokio_io::io;
 use futures::{Future, Stream};
 
-fn run() -> Result<(), Box<std::error::Error>> {
+error_chain!{}
+
+fn process(socket: TcpStream) {
+    // TODO: accept connections, read data, store in db, reply
+    println!("fu");
+    let connection = io::write_all(socket, "hello world\n").then(|res| {
+        println!("wrote message; success={:?}", res.is_ok());
+        println!("res = {:?}", res);
+        current_thread::spawn(io::write_all(res.unwrap().0, "fu\n").then(|res| {
+            println!("fu");
+            Ok(())
+        }));
+        Ok(())
+    });
+    current_thread::spawn(connection);
+}
+
+fn run() -> Result<()> {
     let addr = "127.0.0.1:6142".parse().unwrap();
     let listener = TcpListener::bind(&addr).unwrap();
 
     let server = listener
         .incoming()
-        .for_each(|socket| {
+        .for_each(move |socket| {
             println!("accepted socket; addr={:?}", socket.peer_addr().unwrap());
 
-            let connection = io::write_all(socket, "hello world\n").then(|res| {
-                println!("wrote message; success={:?}", res.is_ok());
-                println!("res = {:?}", res);
-                current_thread::spawn(io::write_all(res.unwrap().0, "fu\n").then(|res| {
-                    println!("fu");
-                    Ok(())
-                }));
-                Ok(())
-            });
             // spawn a new task that processes the socket
-            current_thread::spawn(connection);
+            process(socket);
             Ok(())
         })
         .map_err(|err| {
