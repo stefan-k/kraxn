@@ -2,6 +2,19 @@
 name = "kraxn"
 version = "0.0.0"
 authors = ["Stefan Kroboth <stefan.kroboth@gmail.com>"]
+license = "MIT OR Apache-2.0"
+description = "WIP"
+documentation = "https://stefan-k.github.io/kraxn/kraxn/"
+homepage = "https://github.com/stefan-k/kraxn"
+repository = "https://github.com/stefan-k/kraxn"
+readme = "README.md"
+keywords = ["science", "HPC"]
+categories = ["science"]
+#license-file = "LICENSE-APACHE"
+exclude = [ 
+	".travis.yml",
+	"push_docs",
+]
 
 [[bin]]
 name = "kraxn-server"
@@ -12,6 +25,11 @@ name = "kraxn-client"
 path = "client/src/main.rs"
 
 [dependencies]
+clippy = {version = "*", optional = true}
+tokio = "*"
+tokio-io = "*"
+futures = "*"
+error-chain = "*"
 
 [workspace]
 members = ["server", "client"]
