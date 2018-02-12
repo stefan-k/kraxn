@@ -14,11 +14,20 @@
 #[macro_use]
 extern crate error_chain;
 extern crate futures;
-//extern crate tokio;
 extern crate serde_json;
 extern crate tokio_core;
 extern crate tokio_io;
 extern crate tokio_serde_json;
+
+use futures::Stream;
+use tokio_core::reactor::{Core, Handle};
+use tokio_core::net::{TcpListener, TcpStream};
+
+// use length delimited frames
+use tokio_io::codec::length_delimited;
+
+use serde_json::Value;
+use tokio_serde_json::ReadJson;
 
 error_chain!{
     foreign_links {
@@ -27,16 +36,21 @@ error_chain!{
     }
 }
 
-use futures::Stream;
-use tokio_core::reactor::Core;
-use tokio_core::net::TcpListener;
+fn process(socket: TcpStream, handle: &Handle) {
+    // delimit frames using a length header
+    let length_delimited = length_delimited::FramedRead::new(socket);
 
-// use length delimited frames
-use tokio_io::codec::length_delimited;
+    // deserialize frames
+    let deserialized =
+        ReadJson::<_, Value>::new(length_delimited).map_err(|e| println!("Err: {:?}", e));
 
-use serde_json::Value;
-// use tokio_serde_json::ReadJson;
-use tokio_serde_json::ReadJson;
+    // spawn a task that prints all received messages to STDOUT
+    handle.spawn(deserialized.for_each(|msg| {
+        println!("Got: {:?}", msg);
+        Ok(())
+    }));
+    // Ok(())
+}
 
 fn run() -> Result<()> {
     let mut core = Core::new()?;
@@ -48,18 +62,7 @@ fn run() -> Result<()> {
     println!("Listening on {:?}", listener.local_addr());
 
     core.run(listener.incoming().for_each(|(socket, _)| {
-        // delimit frames using a length header
-        let length_delimited = length_delimited::FramedRead::new(socket);
-
-        // deserialize frames
-        let deserialized =
-            ReadJson::<_, Value>::new(length_delimited).map_err(|e| println!("Err: {:?}", e));
-
-        // spawn a task that prints all received messages to STDOUT
-        handle.spawn(deserialized.for_each(|msg| {
-            println!("Got: {:?}", msg);
-            Ok(())
-        }));
+        process(socket, &handle);
         Ok(())
     })).unwrap();
     Ok(())
