@@ -44,12 +44,12 @@ fn process(socket: TcpStream, handle: &Handle) {
     let deserialized =
         ReadJson::<_, Value>::new(length_delimited).map_err(|e| println!("Err: {:?}", e));
 
+    println!("fu");
     // spawn a task that prints all received messages to STDOUT
     handle.spawn(deserialized.for_each(|msg| {
         println!("Got: {:?}", msg);
         Ok(())
     }));
-    // Ok(())
 }
 
 fn run() -> Result<()> {
