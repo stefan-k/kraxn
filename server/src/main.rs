@@ -20,7 +20,12 @@ extern crate tokio_core;
 extern crate tokio_io;
 extern crate tokio_serde_json;
 
-error_chain!{}
+error_chain!{
+    foreign_links {
+        IoError(std::io::Error);
+        AddrParseError(std::net::AddrParseError);
+    }
+}
 
 use futures::Stream;
 use tokio_core::reactor::Core;
@@ -34,11 +39,11 @@ use serde_json::Value;
 use tokio_serde_json::ReadJson;
 
 fn run() -> Result<()> {
-    let mut core = Core::new().unwrap();
+    let mut core = Core::new()?;
     let handle = core.handle();
 
     // bind a server socket
-    let listener = TcpListener::bind(&"127.0.0.1:17653".parse().unwrap(), &handle).unwrap();
+    let listener = TcpListener::bind(&"127.0.0.1:17653".parse()?, &handle)?;
 
     println!("Listening on {:?}", listener.local_addr());
 
