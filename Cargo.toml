@@ -30,6 +30,9 @@ tokio = "*"
 tokio-io = "*"
 futures = "*"
 error-chain = "*"
+tokio-core = "*"
+tokio-serde-json = { git = "https://github.com/carllerche/tokio-serde-json" }
+serde_json = "*"
 
 [workspace]
 members = ["server", "client"]

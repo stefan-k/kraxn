@@ -14,56 +14,49 @@
 #[macro_use]
 extern crate error_chain;
 extern crate futures;
-extern crate tokio;
+//extern crate tokio;
+extern crate serde_json;
+extern crate tokio_core;
 extern crate tokio_io;
-
-use tokio::net::{TcpListener, TcpStream};
-use tokio::executor::current_thread;
-use tokio_io::io;
-use futures::{Future, Stream};
+extern crate tokio_serde_json;
 
 error_chain!{}
 
-fn process(socket: TcpStream) {
-    // TODO: accept connections, read data, store in db, reply
-    println!("fu");
-    let connection = io::write_all(socket, "hello world\n").then(|res| {
-        println!("wrote message; success={:?}", res.is_ok());
-        println!("res = {:?}", res);
-        current_thread::spawn(io::write_all(res.unwrap().0, "fu\n").then(|res| {
-            println!("fu");
+use futures::Stream;
+use tokio_core::reactor::Core;
+use tokio_core::net::TcpListener;
+
+// use length delimited frames
+use tokio_io::codec::length_delimited;
+
+use serde_json::Value;
+// use tokio_serde_json::ReadJson;
+use tokio_serde_json::ReadJson;
+
+fn run() -> Result<()> {
+    let mut core = Core::new().unwrap();
+    let handle = core.handle();
+
+    // bind a server socket
+    let listener = TcpListener::bind(&"127.0.0.1:17653".parse().unwrap(), &handle).unwrap();
+
+    println!("Listening on {:?}", listener.local_addr());
+
+    core.run(listener.incoming().for_each(|(socket, _)| {
+        // delimit frames using a length header
+        let length_delimited = length_delimited::FramedRead::new(socket);
+
+        // deserialize frames
+        let deserialized =
+            ReadJson::<_, Value>::new(length_delimited).map_err(|e| println!("Err: {:?}", e));
+
+        // spawn a task that prints all received messages to STDOUT
+        handle.spawn(deserialized.for_each(|msg| {
+            println!("Got: {:?}", msg);
             Ok(())
         }));
         Ok(())
-    });
-    current_thread::spawn(connection);
-}
-
-fn run() -> Result<()> {
-    let addr = "127.0.0.1:6142".parse().unwrap();
-    let listener = TcpListener::bind(&addr).unwrap();
-
-    let server = listener
-        .incoming()
-        .for_each(move |socket| {
-            println!("accepted socket; addr={:?}", socket.peer_addr().unwrap());
-
-            // spawn a new task that processes the socket
-            process(socket);
-            Ok(())
-        })
-        .map_err(|err| {
-            // all tasks must have an `Error` type of `()`. this forces error handling and helps avoid
-            // silcencing failures.
-            // log error
-            println!("accept error = {:?}", err);
-        });
-
-    current_thread::run(|_| {
-        // spawn server task
-        current_thread::spawn(server);
-        println!("server running on {}", addr);
-    });
+    })).unwrap();
     Ok(())
 }
 
@@ -72,3 +65,58 @@ fn main() {
         println!("error: {}", e);
     }
 }
+
+// use tokio::net::{TcpListener, TcpStream};
+// use tokio::executor::current_thread;
+// use tokio_io::io;
+// use futures::{Future, Stream};
+//
+//
+// fn process(socket: TcpStream) {
+//     // TODO: accept connections, read data, store in db, reply
+//     println!("fu");
+//     let connection = io::write_all(socket, "hello world\n").then(|res| {
+//         println!("wrote message; success={:?}", res.is_ok());
+//         println!("res = {:?}", res);
+//         current_thread::spawn(io::write_all(res.unwrap().0, "fu\n").then(|res| {
+//             println!("fu");
+//             Ok(())
+//         }));
+//         Ok(())
+//     });
+//     current_thread::spawn(connection);
+// }
+//
+// fn run() -> Result<()> {
+//     let addr = "127.0.0.1:6142".parse().unwrap();
+//     let listener = TcpListener::bind(&addr).unwrap();
+//
+//     let server = listener
+//         .incoming()
+//         .for_each(move |socket| {
+//             println!("accepted socket; addr={:?}", socket.peer_addr().unwrap());
+//
+//             // spawn a new task that processes the socket
+//             process(socket);
+//             Ok(())
+//         })
+//         .map_err(|err| {
+//             // all tasks must have an `Error` type of `()`. this forces error handling and helps avoid
+//             // silcencing failures.
+//             // log error
+//             println!("accept error = {:?}", err);
+//         });
+//
+//     current_thread::run(|_| {
+//         // spawn server task
+//         current_thread::spawn(server);
+//         println!("server running on {}", addr);
+//     });
+//     Ok(())
+// }
+//
+// fn main() {
+//     if let Err(ref e) = run() {
+//         println!("error: {}", e);
+//     }
+// }
