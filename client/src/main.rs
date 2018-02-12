@@ -13,9 +13,55 @@
 #![warn(missing_docs)]
 #[macro_use]
 extern crate error_chain;
+extern crate futures;
+#[macro_use]
+extern crate serde_json;
+extern crate tokio_core;
+extern crate tokio_io;
+extern crate tokio_serde_json;
 
-fn run() -> Result<(), Box<std::error::Error>> {
-    println!("Hello, world!");
+/// `std::io::Error`
+/// `std::net::AddrParseError`
+error_chain!{
+    foreign_links {
+        IoError(std::io::Error);
+        AddrParseError(std::net::AddrParseError);
+    }
+}
+
+use futures::{Future, Sink};
+use tokio_core::reactor::Core;
+use tokio_core::net::TcpStream;
+
+// use length delmited frames
+use tokio_io::codec::length_delimited;
+
+use tokio_serde_json::WriteJson;
+
+fn run() -> Result<()> {
+    let mut core = Core::new()?;
+    let handle = core.handle();
+
+    // bin a server socket
+    let socket = TcpStream::connect(&"127.0.0.1:17653".parse()?, &handle);
+
+    core.run(socket.and_then(|socket| {
+        // delimit frames using a length header
+        let length_delimited = length_delimited::FramedWrite::new(socket);
+
+        // serialize frames with JSON
+        let serialized = WriteJson::new(length_delimited);
+
+        // Send the value
+        serialized.send(json!({
+            "name": "fu",
+            "age": 42,
+            "phones": [
+                "1234",
+                "5678"
+            ]
+        }))
+    })).unwrap();
     Ok(())
 }
 
