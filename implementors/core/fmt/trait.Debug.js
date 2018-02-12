@@ -1,4 +1,5 @@
 (function() {var implementors = {};
+implementors["kraxn_client"] = ["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html\" title=\"trait core::fmt::Debug\">Debug</a> for <a class=\"struct\" href=\"kraxn_client/struct.Error.html\" title=\"struct kraxn_client::Error\">Error</a>","impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html\" title=\"trait core::fmt::Debug\">Debug</a> for <a class=\"enum\" href=\"kraxn_client/enum.ErrorKind.html\" title=\"enum kraxn_client::ErrorKind\">ErrorKind</a>",];
 implementors["kraxn_server"] = ["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html\" title=\"trait core::fmt::Debug\">Debug</a> for <a class=\"struct\" href=\"kraxn_server/struct.Error.html\" title=\"struct kraxn_server::Error\">Error</a>","impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html\" title=\"trait core::fmt::Debug\">Debug</a> for <a class=\"enum\" href=\"kraxn_server/enum.ErrorKind.html\" title=\"enum kraxn_server::ErrorKind\">ErrorKind</a>",];
 
             if (window.register_implementors) {
