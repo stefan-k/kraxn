@@ -4,23 +4,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `kraxn_client` crate.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, kraxn_client">
+    <meta name="description" content="Source to the Rust file `server/src/db/schema.rs`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang">
 
-    <title>kraxn_client - Rust</title>
+    <title>schema.rs.html -- source</title>
 
-    <link rel="stylesheet" type="text/css" href="../normalize.css">
-    <link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle">
+    <link rel="stylesheet" type="text/css" href="../../../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle">
     
-    <link rel="stylesheet" type="text/css" href="../dark.css">
-    <link rel="stylesheet" type="text/css" href="../main.css" id="themeStyle">
-    <script src="../storage.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../dark.css">
+    <link rel="stylesheet" type="text/css" href="../../../main.css" id="themeStyle">
+    <script src="../../../storage.js"></script>
     
 
     
     
 </head>
-<body class="rustdoc mod">
+<body class="rustdoc source">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -33,16 +33,16 @@
     <nav class="sidebar">
         <div class="sidebar-menu">&#9776;</div>
         
-        <p class='location'>Crate kraxn_client</p><div class="sidebar-elems"><p class='location'></p><script>window.sidebarCurrent = {name: 'kraxn_client', ty: 'mod', relpath: '../'};</script></div>
+        
     </nav>
 
     <div class="theme-picker">
         <button id="theme-picker" aria-label="Pick another theme!">
-            <img src="../brush.svg" width="18" alt="Pick another theme!">
+            <img src="../../../brush.svg" width="18" alt="Pick another theme!">
         </button>
         <div id="theme-choices"></div>
     </div>
-    <script src="../theme.js"></script>
+    <script src="../../../theme.js"></script>
     <nav class="sub">
         <form class="search-form js-only">
             <div class="search-container">
@@ -54,14 +54,25 @@
         </form>
     </nav>
 
-    <section id='main' class="content">
-<h1 class='fqn'><span class='in-band'>Crate <a class="mod" href=''>kraxn_client</a></span><span class='out-of-band'><span id='render-detail'>
-                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                       [<span class='inner'>&#x2212;</span>]
-                   </a>
-               </span><a class='srclink' href='../src/kraxn_client/main.rs.html#8-68' title='goto source code'>[src]</a></span></h1>
-<div class='docblock'><p>TODO Documentation</p>
-</div></section>
+    <section id='main' class="content"><pre class="line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+</pre><pre class="rust ">
+<span class="macro">table</span><span class="macro">!</span> {
+    <span class="ident">posts</span> (<span class="ident">id</span>) {
+        <span class="ident">id</span> <span class="op">-&gt;</span> <span class="ident">Int4</span>,
+        <span class="ident">title</span> <span class="op">-&gt;</span> <span class="ident">Varchar</span>,
+        <span class="ident">body</span> <span class="op">-&gt;</span> <span class="ident">Text</span>,
+        <span class="ident">published</span> <span class="op">-&gt;</span> <span class="ident">Bool</span>,
+    }
+}
+</pre>
+</section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
@@ -119,10 +130,10 @@
     
 
     <script>
-        window.rootPath = "../";
-        window.currentCrate = "kraxn_client";
+        window.rootPath = "../../../";
+        window.currentCrate = "kraxn_server";
     </script>
-    <script src="../main.js"></script>
-    <script defer src="../search-index.js"></script>
+    <script src="../../../main.js"></script>
+    <script defer src="../../../search-index.js"></script>
 </body>
 </html>

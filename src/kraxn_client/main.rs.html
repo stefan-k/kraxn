@@ -122,10 +122,6 @@
 <span id="66">66</span>
 <span id="67">67</span>
 <span id="68">68</span>
-<span id="69">69</span>
-<span id="70">70</span>
-<span id="71">71</span>
-<span id="72">72</span>
 </pre><pre class="rust ">
 <span class="comment">// Copyright 2018 Stefan Kroboth</span>
 <span class="comment">//</span>
@@ -149,14 +145,8 @@
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">tokio_io</span>;
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">tokio_serde_json</span>;
 
-<span class="doccomment">/// `std::io::Error`</span>
-<span class="doccomment">/// `std::net::AddrParseError`</span>
-<span class="macro">error_chain</span><span class="macro">!</span>{
-    <span class="ident">foreign_links</span> {
-        <span class="ident">IoError</span>(<span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Error</span>);
-        <span class="ident">AddrParseError</span>(<span class="ident">std</span>::<span class="ident">net</span>::<span class="ident">AddrParseError</span>);
-    }
-}
+<span class="doccomment">/// Errors</span>
+<span class="kw">mod</span> <span class="ident">errors</span>;
 
 <span class="kw">use</span> <span class="ident">futures</span>::{<span class="ident">Future</span>, <span class="ident">Sink</span>};
 <span class="kw">use</span> <span class="ident">tokio_core</span>::<span class="ident">reactor</span>::<span class="ident">Core</span>;
@@ -166,6 +156,8 @@
 <span class="kw">use</span> <span class="ident">tokio_io</span>::<span class="ident">codec</span>::<span class="ident">length_delimited</span>;
 
 <span class="kw">use</span> <span class="ident">tokio_serde_json</span>::<span class="ident">WriteJson</span>;
+
+<span class="kw">use</span> <span class="ident">errors</span>::<span class="kw-2">*</span>;
 
 <span class="kw">fn</span> <span class="ident">run</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">core</span> <span class="op">=</span> <span class="ident">Core</span>::<span class="ident">new</span>()<span class="question-mark">?</span>;
@@ -189,8 +181,8 @@
                 <span class="string">&quot;1234&quot;</span>,
                 <span class="string">&quot;5678&quot;</span>
             ]
-        }))
-    })).<span class="ident">unwrap</span>();
+    }))
+    }))<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(())
 }
 
