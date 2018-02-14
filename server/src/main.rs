@@ -11,6 +11,8 @@
 #![cfg_attr(feature = "clippy", feature(plugin))]
 #![cfg_attr(feature = "clippy", plugin(clippy))]
 #![warn(missing_docs)]
+extern crate diesel;
+extern crate dotenv;
 #[macro_use]
 extern crate error_chain;
 extern crate futures;
@@ -22,18 +24,29 @@ extern crate tokio_serde_json;
 use futures::Stream;
 use tokio_core::reactor::{Core, Handle};
 use tokio_core::net::{TcpListener, TcpStream};
-
-// use length delimited frames
 use tokio_io::codec::length_delimited;
-
 use serde_json::Value;
 use tokio_serde_json::ReadJson;
+use diesel::prelude::*;
+use diesel::pg::PgConnection;
+use dotenv::dotenv;
+use std::env;
 
 error_chain!{
     foreign_links {
         IoError(std::io::Error);
         AddrParseError(std::net::AddrParseError);
+        VarError(std::env::VarError);
+        ConnectionError(diesel::ConnectionError);
     }
+}
+
+pub fn establish_db_connection() -> Result<PgConnection> {
+    dotenv().ok();
+
+    let database_url = env::var("DATABASE_URL")?;
+    // this pattern of Ok(X?) is odd, but seems to be required to work with error-chain (?)
+    Ok(PgConnection::establish(&database_url)?)
 }
 
 fn process(socket: TcpStream, handle: &Handle) {
