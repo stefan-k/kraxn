@@ -11,6 +11,7 @@ use diesel::prelude::*;
 use diesel::pg::PgConnection;
 use dotenv::dotenv;
 use std::env;
+use errors::*;
 
 pub mod schema;
 pub mod models;
@@ -22,4 +23,23 @@ pub fn establish_db_connection() -> Result<PgConnection> {
     let database_url = env::var("DATABASE_URL")?;
     // this pattern of Ok(X?) is odd, but seems to be required to work with error-chain (?)
     Ok(PgConnection::establish(&database_url)?)
+}
+
+pub fn print_posts() -> Result<()> {
+    use schema::posts::dsl::*;
+    use models::*;
+
+    let connection = establish_db_connection()?;
+    let results = posts
+        .filter(published.eq(true))
+        .limit(5)
+        .load::<Post>(&connection)
+        .expect("Error loading posts.");
+    println!("Displaying {} posts", results.len());
+    for post in results {
+        println!("{}", post.title);
+        println!("-----------\n");
+        println!("{}", post.body);
+    }
+    Ok(())
 }

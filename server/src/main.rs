@@ -11,6 +11,7 @@
 #![cfg_attr(feature = "clippy", feature(plugin))]
 #![cfg_attr(feature = "clippy", plugin(clippy))]
 #![warn(missing_docs)]
+#[macro_use]
 extern crate diesel;
 extern crate dotenv;
 #[macro_use]
@@ -24,6 +25,9 @@ extern crate tokio_serde_json;
 /// Errors
 mod errors;
 
+/// Database
+mod db;
+
 use futures::Stream;
 use tokio_core::reactor::{Core, Handle};
 use tokio_core::net::{TcpListener, TcpStream};
@@ -31,6 +35,7 @@ use tokio_io::codec::length_delimited;
 use serde_json::Value;
 use tokio_serde_json::ReadJson;
 use errors::*;
+use db::*;
 
 /// Process a socket
 fn process(socket: TcpStream, handle: &Handle) {
@@ -45,6 +50,7 @@ fn process(socket: TcpStream, handle: &Handle) {
     // spawn a task that prints all received messages to STDOUT
     handle.spawn(deserialized.for_each(|msg| {
         println!("Got: {:?}", msg);
+        print_posts().unwrap();
         Ok(())
     }));
 }
