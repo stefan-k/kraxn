@@ -20,14 +20,8 @@ extern crate tokio_core;
 extern crate tokio_io;
 extern crate tokio_serde_json;
 
-/// `std::io::Error`
-/// `std::net::AddrParseError`
-error_chain!{
-    foreign_links {
-        IoError(std::io::Error);
-        AddrParseError(std::net::AddrParseError);
-    }
-}
+/// Errors
+mod errors;
 
 use futures::{Future, Sink};
 use tokio_core::reactor::Core;
@@ -37,6 +31,8 @@ use tokio_core::net::TcpStream;
 use tokio_io::codec::length_delimited;
 
 use tokio_serde_json::WriteJson;
+
+use errors::*;
 
 fn run() -> Result<()> {
     let mut core = Core::new()?;
