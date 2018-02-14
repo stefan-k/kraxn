@@ -21,6 +21,9 @@ extern crate tokio_core;
 extern crate tokio_io;
 extern crate tokio_serde_json;
 
+/// Errors
+mod errors;
+
 use futures::Stream;
 use tokio_core::reactor::{Core, Handle};
 use tokio_core::net::{TcpListener, TcpStream};
@@ -31,16 +34,9 @@ use diesel::prelude::*;
 use diesel::pg::PgConnection;
 use dotenv::dotenv;
 use std::env;
+use errors::*;
 
-error_chain!{
-    foreign_links {
-        IoError(std::io::Error);
-        AddrParseError(std::net::AddrParseError);
-        VarError(std::env::VarError);
-        ConnectionError(diesel::ConnectionError);
-    }
-}
-
+/// Establish a connection with the PostgresSQL database
 pub fn establish_db_connection() -> Result<PgConnection> {
     dotenv().ok();
 
@@ -49,6 +45,7 @@ pub fn establish_db_connection() -> Result<PgConnection> {
     Ok(PgConnection::establish(&database_url)?)
 }
 
+/// Process a socket
 fn process(socket: TcpStream, handle: &Handle) {
     // delimit frames using a length header
     let length_delimited = length_delimited::FramedRead::new(socket);
