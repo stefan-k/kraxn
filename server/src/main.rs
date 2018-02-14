@@ -30,20 +30,7 @@ use tokio_core::net::{TcpListener, TcpStream};
 use tokio_io::codec::length_delimited;
 use serde_json::Value;
 use tokio_serde_json::ReadJson;
-use diesel::prelude::*;
-use diesel::pg::PgConnection;
-use dotenv::dotenv;
-use std::env;
 use errors::*;
-
-/// Establish a connection with the PostgresSQL database
-pub fn establish_db_connection() -> Result<PgConnection> {
-    dotenv().ok();
-
-    let database_url = env::var("DATABASE_URL")?;
-    // this pattern of Ok(X?) is odd, but seems to be required to work with error-chain (?)
-    Ok(PgConnection::establish(&database_url)?)
-}
 
 /// Process a socket
 fn process(socket: TcpStream, handle: &Handle) {
