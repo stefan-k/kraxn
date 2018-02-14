@@ -50,6 +50,10 @@ fn process(socket: TcpStream, handle: &Handle) {
     // spawn a task that prints all received messages to STDOUT
     handle.spawn(deserialized.for_each(|msg| {
         println!("Got: {:?}", msg);
+        create_post("bla", "blabla");
+        create_post("fu", "blabla");
+        publish_post(1);
+        publish_post(2);
         print_posts().unwrap();
         Ok(())
     }));
