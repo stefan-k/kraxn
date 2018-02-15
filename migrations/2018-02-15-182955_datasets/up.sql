@@ -1,0 +1,6 @@
+CREATE TABLE datasets (
+    id SERIAL PRIMARY KEY,
+    plot_id INTEGER NOT NULL,
+    x DOUBLE PRECISION,
+    y DOUBLE PRECISION
+)
