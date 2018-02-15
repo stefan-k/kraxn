@@ -32,7 +32,9 @@ futures = "*"
 error-chain = "*"
 tokio-core = "*"
 tokio-serde-json = { git = "https://github.com/carllerche/tokio-serde-json" }
+serde = "*"
 serde_json = "*"
+serde_derive = "*"
 diesel = { version = "1.1.1", features = ["postgres"] }
 dotenv = "0.10.1"
 
