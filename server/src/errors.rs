@@ -16,5 +16,6 @@ error_chain!{
         AddrParseError(std::net::AddrParseError);
         VarError(std::env::VarError);
         ConnectionError(diesel::ConnectionError);
+        DieselError(diesel::result::Error);
     }
 }

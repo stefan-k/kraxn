@@ -50,11 +50,10 @@ fn run() -> Result<()> {
 
         // Send the value
         serialized.send(json!({
-            "name": "fu",
-            "age": 42,
-            "phones": [
-                "1234",
-                "5678"
+            "plot_id": 1_u32,
+            "data": [
+                1_f64,
+                2_f64
             ]
     }))
     }))?;

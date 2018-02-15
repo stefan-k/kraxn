@@ -17,6 +17,8 @@ extern crate dotenv;
 #[macro_use]
 extern crate error_chain;
 extern crate futures;
+#[macro_use]
+extern crate serde_derive;
 extern crate serde_json;
 extern crate tokio_core;
 extern crate tokio_io;
@@ -32,10 +34,19 @@ use futures::Stream;
 use tokio_core::reactor::{Core, Handle};
 use tokio_core::net::{TcpListener, TcpStream};
 use tokio_io::codec::length_delimited;
-use serde_json::Value;
+// use serde_json::Value;
 use tokio_serde_json::ReadJson;
 use errors::*;
 use db::*;
+
+/// TODO: use the one from models
+#[derive(Serialize, Deserialize, Debug)]
+pub struct DataP {
+    /// plot id
+    pub plot_id: i32,
+    /// data
+    pub data: Vec<f64>,
+}
 
 /// Process a socket
 fn process(socket: TcpStream, handle: &Handle) {
@@ -44,17 +55,19 @@ fn process(socket: TcpStream, handle: &Handle) {
 
     // deserialize frames
     let deserialized =
-        ReadJson::<_, Value>::new(length_delimited).map_err(|e| println!("Err: {:?}", e));
+        ReadJson::<_, DataP>::new(length_delimited).map_err(|e| println!("Err: {:?}", e));
 
-    println!("fu");
     // spawn a task that prints all received messages to STDOUT
-    handle.spawn(deserialized.for_each(|msg| {
+    handle.spawn(deserialized.for_each(|msg: DataP| {
         println!("Got: {:?}", msg);
-        create_post("bla", "blabla");
-        create_post("fu", "blabla");
-        publish_post(1);
-        publish_post(2);
-        print_posts().unwrap();
+        insert_dataset(msg.plot_id, msg.data[0], msg.data[1]).unwrap();
+        print_data(1).unwrap();
+
+        // create_post("bla", "blabla");
+        // create_post("fu", "blabla");
+        // publish_post(1);
+        // publish_post(2);
+        // print_posts().unwrap();
         Ok(())
     }));
 }

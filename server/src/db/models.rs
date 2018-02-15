@@ -7,19 +7,36 @@
 
 //! Database models
 
-use super::schema::posts;
+// use super::schema::posts;
+use super::schema::datasets;
 
 #[derive(Queryable)]
-pub struct Post {
+pub struct DataPoint {
     pub id: i32,
-    pub title: String,
-    pub body: String,
-    pub published: bool,
+    pub plot_id: i32,
+    pub x: Option<f64>,
+    pub y: Option<f64>,
 }
 
 #[derive(Insertable)]
-#[table_name = "posts"]
-pub struct NewPost<'a> {
-    pub title: &'a str,
-    pub body: &'a str,
+#[table_name = "datasets"]
+pub struct NewDataPoint {
+    pub plot_id: i32,
+    pub x: f64,
+    pub y: f64,
 }
+
+// #[derive(Queryable)]
+// pub struct Post {
+//     pub id: i32,
+//     pub title: String,
+//     pub body: String,
+//     pub published: bool,
+// }
+//
+// #[derive(Insertable)]
+// #[table_name = "posts"]
+// pub struct NewPost<'a> {
+//     pub title: &'a str,
+//     pub body: &'a str,
+// }
