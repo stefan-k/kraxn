@@ -79,6 +79,23 @@
 <span id="23">23</span>
 <span id="24">24</span>
 <span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
 </pre><pre class="rust ">
 <span class="comment">// Copyright 2018 Stefan Kroboth</span>
 <span class="comment">//</span>
@@ -89,22 +106,39 @@
 
 <span class="doccomment">//! Database models</span>
 
-<span class="kw">use</span> <span class="kw">super</span>::<span class="ident">schema</span>::<span class="ident">posts</span>;
+<span class="comment">// use super::schema::posts;</span>
+<span class="kw">use</span> <span class="kw">super</span>::<span class="ident">schema</span>::<span class="ident">datasets</span>;
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Queryable</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Post</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DataPoint</span> {
     <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">i32</span>,
-    <span class="kw">pub</span> <span class="ident">title</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">body</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">published</span>: <span class="ident">bool</span>,
+    <span class="kw">pub</span> <span class="ident">plot_id</span>: <span class="ident">i32</span>,
+    <span class="kw">pub</span> <span class="ident">x</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">y</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span>,
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Insertable</span>)]</span>
-<span class="attribute">#[<span class="ident">table_name</span> <span class="op">=</span> <span class="string">&quot;posts&quot;</span>]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">NewPost</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="ident">title</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>,
-    <span class="kw">pub</span> <span class="ident">body</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>,
+<span class="attribute">#[<span class="ident">table_name</span> <span class="op">=</span> <span class="string">&quot;datasets&quot;</span>]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">NewDataPoint</span> {
+    <span class="kw">pub</span> <span class="ident">plot_id</span>: <span class="ident">i32</span>,
+    <span class="kw">pub</span> <span class="ident">x</span>: <span class="ident">f64</span>,
+    <span class="kw">pub</span> <span class="ident">y</span>: <span class="ident">f64</span>,
 }
+
+<span class="comment">// #[derive(Queryable)]</span>
+<span class="comment">// pub struct Post {</span>
+<span class="comment">//     pub id: i32,</span>
+<span class="comment">//     pub title: String,</span>
+<span class="comment">//     pub body: String,</span>
+<span class="comment">//     pub published: bool,</span>
+<span class="comment">// }</span>
+<span class="comment">//</span>
+<span class="comment">// #[derive(Insertable)]</span>
+<span class="comment">// #[table_name = &quot;posts&quot;]</span>
+<span class="comment">// pub struct NewPost&lt;&#39;a&gt; {</span>
+<span class="comment">//     pub title: &amp;&#39;a str,</span>
+<span class="comment">//     pub body: &amp;&#39;a str,</span>
+<span class="comment">// }</span>
 </pre>
 </section>
     <section id='search' class="content hidden"></section>

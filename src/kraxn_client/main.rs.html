@@ -121,7 +121,6 @@
 <span id="65">65</span>
 <span id="66">66</span>
 <span id="67">67</span>
-<span id="68">68</span>
 </pre><pre class="rust ">
 <span class="comment">// Copyright 2018 Stefan Kroboth</span>
 <span class="comment">//</span>
@@ -175,11 +174,10 @@
 
         <span class="comment">// Send the value</span>
         <span class="ident">serialized</span>.<span class="ident">send</span>(<span class="macro">json</span><span class="macro">!</span>({
-            <span class="string">&quot;name&quot;</span>: <span class="string">&quot;fu&quot;</span>,
-            <span class="string">&quot;age&quot;</span>: <span class="number">42</span>,
-            <span class="string">&quot;phones&quot;</span>: [
-                <span class="string">&quot;1234&quot;</span>,
-                <span class="string">&quot;5678&quot;</span>
+            <span class="string">&quot;plot_id&quot;</span>: <span class="number">1_u32</span>,
+            <span class="string">&quot;data&quot;</span>: [
+                <span class="number">1_f64</span>,
+                <span class="number">2_f64</span>
             ]
     }))
     }))<span class="question-mark">?</span>;
