@@ -45,4 +45,4 @@ rocket = "*"
 rocket_codegen = "*"
 
 [workspace]
-members = ["server", "client"]
+members = ["server", "client", "web"]
