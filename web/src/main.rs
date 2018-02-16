@@ -6,7 +6,16 @@
 // copied, modified, or distributed except according to those terms.
 
 //! TODO
+#![feature(plugin)]
+#![plugin(rocket_codegen)]
+
+extern crate rocket;
+
+#[get("/")]
+fn index() -> &'static str {
+    "Hello, World"
+}
 
 fn main() {
-    println!("Hello, world!");
+    rocket::ignite().mount("/", routes![index]).launch();
 }
