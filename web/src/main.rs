@@ -25,13 +25,13 @@ struct Message {
 
 #[post("/submit", data = "<message>")]
 fn submit(mut cookies: Cookies, message: Form<Message>) -> Redirect {
-    cookies.add(Cookie::new("message", message.into_inner().message));
+    cookies.add_private(Cookie::new("message", message.into_inner().message));
     Redirect::to("/")
 }
 
 #[get("/")]
-fn index(cookies: Cookies) -> Template {
-    let cookie = cookies.get("message");
+fn index(mut cookies: Cookies) -> Template {
+    let cookie = cookies.get_private("message");
     let mut context = HashMap::new();
     if let Some(ref cookie) = cookie {
         context.insert("message", cookie.value());
