@@ -40,9 +40,11 @@ fn index(mut cookies: Cookies) -> Template {
 
     Template::render("index", &context)
 }
-// fn index() -> &'static str {
-//     "Hello, World"
-// }
+
+#[get("/hello")]
+fn hello() -> &'static str {
+    "Hello, World"
+}
 
 #[error(404)]
 fn not_found(req: &rocket::Request) -> content::Html<String> {
@@ -55,11 +57,26 @@ fn not_found(req: &rocket::Request) -> content::Html<String> {
 
 fn rocket() -> rocket::Rocket {
     rocket::ignite()
-        .mount("/", routes![submit, index])
+        .mount("/", routes![submit, index, hello])
         .catch(errors![not_found])
         .attach(Template::fairing())
 }
 
 fn main() {
     rocket().launch();
+}
+
+#[cfg(test)]
+mod test {
+    use super::rocket;
+    use rocket::local::Client;
+    use rocket::http::Status;
+
+    #[test]
+    fn hello_world() {
+        let client = Client::new(rocket()).expect("valid rocket instance");
+        let mut response = client.get("/hello").dispatch();
+        assert_eq!(response.status(), Status::Ok);
+        assert_eq!(response.body_string(), Some("Hello, World".into()));
+    }
 }
