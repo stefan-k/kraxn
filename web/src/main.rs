@@ -17,6 +17,7 @@ use rocket::request::Form;
 use rocket::response::Redirect;
 use rocket::http::{Cookie, Cookies};
 use rocket_contrib::Template;
+use rocket::response::content;
 
 #[derive(FromForm)]
 struct Message {
@@ -43,9 +44,19 @@ fn index(mut cookies: Cookies) -> Template {
 //     "Hello, World"
 // }
 
+#[error(404)]
+fn not_found(req: &rocket::Request) -> content::Html<String> {
+    content::Html(format!(
+        "<p>Sorry, but '{}' is not a valid path!</p>
+         <p>Try visiting /hello/&lt;name&gt;/&lt;age&gt; instead.</p>",
+        req.uri()
+    ))
+}
+
 fn rocket() -> rocket::Rocket {
     rocket::ignite()
         .mount("/", routes![submit, index])
+        .catch(errors![not_found])
         .attach(Template::fairing())
 }
 
