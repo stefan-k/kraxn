@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+<style>
+.chart div {
+  font: 10px sans-serif;
+  background-color: steelblue;
+  text-align: right;
+  padding: 3px;
+  margin: 1px;
+  color: white;
+}
+</style>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="witdh=device-width" />
+    <title>Barchart</title>
+  </head>
+  <body>
+    <h1>Barchart</h1>
+    <div class="chart"></div>
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/barchart.js" charset="utf-8"></script>
+    <!-- <script> -->
+    <!-- var data = [4, 8, 15, 16, 23, 42]; -->
+    <!--  -->
+    <!-- var x = d3.scale.linear() -->
+    <!--   .domain([0, d3.max(data)]) -->
+    <!--   .range([0, 420]); -->
+    <!--  -->
+    <!-- d3.select(".chart") -->
+    <!--   .selectAll("div") -->
+    <!--   .data(data) -->
+    <!--   .enter() -->
+    <!--   .append("div") -->
+    <!--   .style("width", function(d) { return x(d) + "px"; }) -->
+    <!--   .text(function(d) { return d; }); -->
+    <!-- </script> -->
+    <!-- {{#if message }} -->
+    <!--   <p>{{message}}</p> -->
+    <!-- {{else}} -->
+    <!--   <p>No message yet.</p> -->
+    <!-- {{/if}} -->
+
+    <!-- <form action="/submit" method="post" accept-charset="utf-8"> -->
+    <!--   <textarea placeholder="Your message here..." -->
+    <!--             name="message" rows="10" cols="50"></textarea> -->
+    <!--   <p><input type="submit" value="Set Cookie"></p> -->
+    <!-- </form> -->
+  </body>
+</html>

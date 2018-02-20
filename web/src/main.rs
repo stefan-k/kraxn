@@ -41,6 +41,13 @@ fn index(mut cookies: Cookies) -> Template {
     Template::render("index", &context)
 }
 
+#[get("/d3")]
+fn d3() -> Template {
+    let mut context = HashMap::new();
+    context.insert("blabla", "bla");
+    Template::render("d3", &context)
+}
+
 #[get("/hello")]
 fn hello() -> &'static str {
     "Hello, World"
@@ -57,7 +64,7 @@ fn not_found(req: &rocket::Request) -> content::Html<String> {
 
 fn rocket() -> rocket::Rocket {
     rocket::ignite()
-        .mount("/", routes![submit, index, hello])
+        .mount("/", routes![submit, index, hello, d3])
         .catch(errors![not_found])
         .attach(Template::fairing())
 }
