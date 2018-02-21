@@ -13,11 +13,13 @@ extern crate rocket;
 extern crate rocket_contrib;
 
 use std::collections::HashMap;
+use std::path::{Path, PathBuf};
 use rocket::request::Form;
 use rocket::response::Redirect;
 use rocket::http::{Cookie, Cookies};
 use rocket_contrib::Template;
 use rocket::response::content;
+use rocket::response::NamedFile;
 
 #[derive(FromForm)]
 struct Message {
@@ -53,6 +55,11 @@ fn hello() -> &'static str {
     "Hello, World"
 }
 
+#[get("/js/<file..>")]
+fn js_files(file: PathBuf) -> Option<NamedFile> {
+    NamedFile::open(Path::new("js/").join(file)).ok()
+}
+
 #[error(404)]
 fn not_found(req: &rocket::Request) -> content::Html<String> {
     content::Html(format!(
@@ -64,7 +71,7 @@ fn not_found(req: &rocket::Request) -> content::Html<String> {
 
 fn rocket() -> rocket::Rocket {
     rocket::ignite()
-        .mount("/", routes![submit, index, hello, d3])
+        .mount("/", routes![submit, index, hello, d3, js_files])
         .catch(errors![not_found])
         .attach(Template::fairing())
 }
