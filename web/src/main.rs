@@ -50,6 +50,13 @@ fn d3() -> Template {
     Template::render("d3", &context)
 }
 
+#[get("/d3_line")]
+fn d3_line() -> Template {
+    let mut context = HashMap::new();
+    context.insert("blabla", "bla");
+    Template::render("d3_line", &context)
+}
+
 #[get("/hello")]
 fn hello() -> &'static str {
     "Hello, World"
@@ -71,7 +78,7 @@ fn not_found(req: &rocket::Request) -> content::Html<String> {
 
 fn rocket() -> rocket::Rocket {
     rocket::ignite()
-        .mount("/", routes![submit, index, hello, d3, js_files])
+        .mount("/", routes![submit, index, hello, d3, d3_line, js_files])
         .catch(errors![not_found])
         .attach(Template::fairing())
 }
