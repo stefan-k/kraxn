@@ -24,29 +24,38 @@ var line = d3.svg
     return y(d.y);
   });
 
-// var x_axis = d3.svg
-//   .axis()
-//   .scale(x)
-//   .orient("bottom");
-//
-// var y_axis = d3.svg
-//   .axis()
-//   .scale(y)
-//   .orient("left")
-//   .ticks(10, "%");
+var x_axis = d3.svg
+  .axis()
+  .scale(x)
+  .orient("bottom");
+
+var y_axis = d3.svg
+  .axis()
+  .scale(y)
+  .orient("left")
+  .ticks(10, "%");
 
 setInterval(plot, 1000);
 
-// d3.tsv("js/frequency.tsv", type, function(error, data) {
+var data = []; //{ id: 0, x: 30, bottom: 30, left: 40 };
+
 function plot() {
-  d3.csv("data/1", type, function(error, data) {
+  d3.csv("data/1", type, function(error, dat) {
     if (error) throw error;
 
-    x.domain(
-      data.map(function(d) {
+    data = data.concat(dat);
+
+    chart.select("g").remove();
+    g = chart
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    x.domain([
+      0,
+      d3.max(data, function(d) {
         return d.x;
       })
-    );
+    ]);
 
     y.domain([
       0,
@@ -57,15 +66,18 @@ function plot() {
 
     g
       .append("g")
+      .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
-      // .call(d3.axisBottom(x))
-      .select(".domain")
-      .remove();
+      .call(x_axis);
+    g.append("g").attr("transform", "translate(0," + height + ")");
+    // .call(d3.axisBottom(x))
+    // .select(".domain")
+    // .remove();
 
     g
       .append("path")
       .datum(data)
-      .attr("fill", "black")
+      .attr("fill", "none")
       .attr("stroke", "steelblue")
       .attr("stroke-linejoin", "round")
       .attr("stroke-linecap", "round")
