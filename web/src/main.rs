@@ -9,17 +9,20 @@
 #![feature(plugin, custom_derive)]
 #![plugin(rocket_codegen)]
 
+extern crate rand;
 extern crate rocket;
 extern crate rocket_contrib;
 
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 use rocket::request::Form;
-use rocket::response::Redirect;
-use rocket::http::{Cookie, Cookies};
+use rocket::http::{ContentType, Cookie, Cookies};
 use rocket_contrib::Template;
+use rocket::response::Redirect;
 use rocket::response::content;
+use rocket::response::content::Content;
 use rocket::response::NamedFile;
+use rand::distributions::{IndependentSample, Range};
 
 #[derive(FromForm)]
 struct Message {
@@ -67,6 +70,22 @@ fn js_files(file: PathBuf) -> Option<NamedFile> {
     NamedFile::open(Path::new("js/").join(file)).ok()
 }
 
+#[get("/data/<plotid>", format = "text/csv")]
+fn plot_data(plotid: i64) -> Option<Content<String>> {
+    let step = Range::new(0.0, 1.0);
+    let mut rng = rand::thread_rng();
+    let out = format!(
+        "id,x,y\n{},{},{}\n{},{},{}\n",
+        1,
+        step.ind_sample(&mut rng),
+        step.ind_sample(&mut rng),
+        2,
+        step.ind_sample(&mut rng),
+        step.ind_sample(&mut rng)
+    );
+    Some(Content(ContentType::CSV, out))
+}
+
 #[error(404)]
 fn not_found(req: &rocket::Request) -> content::Html<String> {
     content::Html(format!(
@@ -78,7 +97,10 @@ fn not_found(req: &rocket::Request) -> content::Html<String> {
 
 fn rocket() -> rocket::Rocket {
     rocket::ignite()
-        .mount("/", routes![submit, index, hello, d3, d3_line, js_files])
+        .mount(
+            "/",
+            routes![submit, index, hello, d3, d3_line, js_files, plot_data],
+        )
         .catch(errors![not_found])
         .attach(Template::fairing())
 }
