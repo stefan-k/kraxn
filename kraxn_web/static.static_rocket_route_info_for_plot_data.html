@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `kraxn_server` crate.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, kraxn_server">
+    <meta name="description" content="API documentation for the Rust `static_rocket_route_info_for_plot_data` static in crate `kraxn_web`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, static_rocket_route_info_for_plot_data">
 
-    <title>kraxn_server - Rust</title>
+    <title>kraxn_web::static_rocket_route_info_for_plot_data - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../normalize.css">
     <link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle">
@@ -20,7 +20,7 @@
     
     
 </head>
-<body class="rustdoc mod">
+<body class="rustdoc static">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -33,7 +33,7 @@
     <nav class="sidebar">
         <div class="sidebar-menu">&#9776;</div>
         
-        <p class='location'>Crate kraxn_server</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#structs">Structs</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'kraxn_server', ty: 'mod', relpath: '../'};</script></div>
+        <p class='location'><a href='index.html'>kraxn_web</a></p><script>window.sidebarCurrent = {name: 'static_rocket_route_info_for_plot_data', ty: 'static', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <div class="theme-picker">
@@ -55,22 +55,25 @@
     </nav>
 
     <section id='main' class="content">
-<h1 class='fqn'><span class='in-band'>Crate <a class="mod" href=''>kraxn_server</a></span><span class='out-of-band'><span id='render-detail'>
+<h1 class='fqn'><span class='in-band'>Static <a href='index.html'>kraxn_web</a>::<wbr><a class="static" href=''>static_rocket_route_info_for_plot_data</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../src/kraxn_server/main.rs.html#8-89' title='goto source code'>[src]</a></span></h1>
-<div class='docblock'><p>TODO Documentation</p>
-</div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
-<table>
-                       <tr class=' module-item'>
-                           <td><a class="struct" href="struct.DataP.html"
-                                  title='struct kraxn_server::DataP'>DataP</a></td>
-                           <td class='docblock-short'>
-                                <p>TODO: use the one from models</p>
-
-                           </td>
-                       </tr></table></section>
+               </span><a class='srclink' href='../src/kraxn_web/main.rs.html#73' title='goto source code'>[src]</a></span></h1>
+<pre class='rust static'>pub static static_rocket_route_info_for_plot_data: <a class="struct" href="https://api.rocket.rs/rocket/codegen/struct.StaticRouteInfo.html" title="struct rocket::codegen::StaticRouteInfo">StaticRouteInfo</a><code> = </code><code>::rocket::StaticRouteInfo{method: ::rocket::http::Method::Get,
+                          path: &quot;/data/&lt;plotid&gt;&quot;,
+                          handler: rocket_route_fn_plot_data,
+                          format:
+                              Some(::rocket::http::MediaType{source:
+                                                                 ::rocket::http::Source::None,
+                                                             top:
+                                                                 ::rocket::http::IndexedStr::Concrete(::std::borrow::Cow::Borrowed(&quot;text&quot;)),
+                                                             sub:
+                                                                 ::rocket::http::IndexedStr::Concrete(::std::borrow::Cow::Borrowed(&quot;csv&quot;)),
+                                                             params:
+                                                                 ::rocket::http::MediaParams::Static(&amp;[]),}),
+                          rank: None,}</code></pre><div class='docblock'><p>Rocket code generated static route information structure.</p>
+</div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
@@ -129,7 +132,7 @@
 
     <script>
         window.rootPath = "../";
-        window.currentCrate = "kraxn_server";
+        window.currentCrate = "kraxn_web";
     </script>
     <script src="../main.js"></script>
     <script defer src="../search-index.js"></script>
