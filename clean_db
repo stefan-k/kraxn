@@ -1,3 +1,4 @@
 #!/bin/sh
 diesel migration redo
 diesel migration run
+diesel print-schema >| server/src/db/schema.rs

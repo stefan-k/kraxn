@@ -16,4 +16,7 @@ table! {
     }
 }
 
-allow_tables_to_appear_in_same_query!(datasets, posts,);
+allow_tables_to_appear_in_same_query!(
+    datasets,
+    posts,
+);
