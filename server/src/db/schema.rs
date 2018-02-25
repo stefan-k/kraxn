@@ -1,6 +1,7 @@
 table! {
     datasets (id) {
         id -> Int4,
+        timestamp -> Timestamp,
         plot_id -> Int4,
         x -> Nullable<Float8>,
         y -> Nullable<Float8>,
@@ -16,7 +17,4 @@ table! {
     }
 }
 
-allow_tables_to_appear_in_same_query!(
-    datasets,
-    posts,
-);
+allow_tables_to_appear_in_same_query!(datasets, posts,);

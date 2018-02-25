@@ -12,6 +12,7 @@ use diesel::prelude::*;
 use diesel::pg::PgConnection;
 use dotenv::dotenv;
 use std::env;
+use std::time::SystemTime;
 use errors::*;
 use models::{DataPoint, NewDataPoint};
 
@@ -31,8 +32,11 @@ pub fn insert_dataset(plot_id: i32, x: f64, y: f64) -> Result<()> {
     use schema::datasets;
     let conn = establish_db_connection()?;
 
+    let timestamp = SystemTime::now();
+
     let data_point = NewDataPoint {
         plot_id: plot_id,
+        timestamp: timestamp,
         x: x,
         y: y,
     };
@@ -53,12 +57,13 @@ pub fn print_data(pid: i32) -> Result<()> {
     for res in results {
         if let DataPoint {
             id,
+            timestamp,
             plot_id: plid,
             x: Some(x),
             y: Some(y),
         } = res
         {
-            println!("{}|{}: [{}, {}]", id, plid, x, y);
+            println!("{}|{}|{:?}: [{}, {}]", id, plid, timestamp, x, y);
         }
     }
 

@@ -17,5 +17,6 @@ error_chain!{
         VarError(std::env::VarError);
         ConnectionError(diesel::ConnectionError);
         DieselError(diesel::result::Error);
+        TimeError(std::time::SystemTimeError);
     }
 }

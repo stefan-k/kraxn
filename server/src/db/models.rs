@@ -9,10 +9,12 @@
 
 // use super::schema::posts;
 use super::schema::datasets;
+use std::time::SystemTime;
 
 #[derive(Queryable)]
 pub struct DataPoint {
     pub id: i32,
+    pub timestamp: SystemTime,
     pub plot_id: i32,
     pub x: Option<f64>,
     pub y: Option<f64>,
@@ -22,6 +24,7 @@ pub struct DataPoint {
 #[table_name = "datasets"]
 pub struct NewDataPoint {
     pub plot_id: i32,
+    pub timestamp: SystemTime,
     pub x: f64,
     pub y: f64,
 }
