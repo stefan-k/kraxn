@@ -62,12 +62,6 @@ fn process(socket: TcpStream, handle: &Handle) {
         println!("Got: {:?}", msg);
         insert_dataset(msg.plot_id, msg.data[0], msg.data[1]).unwrap();
         print_data(1).unwrap();
-
-        // create_post("bla", "blabla");
-        // create_post("fu", "blabla");
-        // publish_post(1);
-        // publish_post(2);
-        // print_posts().unwrap();
         Ok(())
     }));
 }
