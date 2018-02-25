@@ -6,6 +6,11 @@ WIP. TBA.
 
 [Documentation](https://stefan-k.github.io/kraxn/kraxn/).
 
+## Notes
+
+### Start PostgreSQL
+
+```sudo systemctl start postgresql.service```
 
 ## License
 
