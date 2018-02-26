@@ -39,9 +39,21 @@ use tokio_serde_json::ReadJson;
 use errors::*;
 use db::*;
 
+#[derive(Serialize, Deserialize, Debug)]
+enum Message {
+    NewData(DataPoint),
+    Request(Request),
+}
+
+/// Request message
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Request {
+    req: String,
+}
+
 /// TODO: use the one from models
 #[derive(Serialize, Deserialize, Debug)]
-pub struct DataP {
+pub struct DataPoint {
     /// plot id
     pub plot_id: i32,
     /// data
@@ -55,13 +67,17 @@ fn process(socket: TcpStream, handle: &Handle) {
 
     // deserialize frames
     let deserialized =
-        ReadJson::<_, DataP>::new(length_delimited).map_err(|e| println!("Err: {:?}", e));
+        ReadJson::<_, Message>::new(length_delimited).map_err(|e| println!("Err: {:?}", e));
 
-    // spawn a task that prints all received messages to STDOUT
-    handle.spawn(deserialized.for_each(|msg: DataP| {
+    handle.spawn(deserialized.for_each(|msg: Message| {
         println!("Got: {:?}", msg);
-        insert_dataset(msg.plot_id, msg.data[0], msg.data[1]).unwrap();
-        print_data(1).unwrap();
+        match msg {
+            Message::NewData(DataPoint { plot_id, data }) => {
+                insert_dataset(plot_id, data[0], data[1]).unwrap();
+                print_data(1).unwrap();
+            }
+            Message::Request(Request { req }) => println!("{:?}", req),
+        }
         Ok(())
     }));
 }
