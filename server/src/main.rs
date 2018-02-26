@@ -19,6 +19,7 @@ extern crate error_chain;
 extern crate futures;
 #[macro_use]
 extern crate serde_derive;
+// #[macro_use]
 extern crate serde_json;
 extern crate tokio_core;
 extern crate tokio_io;
@@ -30,11 +31,14 @@ mod errors;
 /// Database
 mod db;
 
+use std::net::SocketAddr;
+// use futures::{Sink, Stream};
 use futures::Stream;
 use tokio_core::reactor::{Core, Handle};
 use tokio_core::net::{TcpListener, TcpStream};
 use tokio_io::codec::length_delimited;
 // use serde_json::Value;
+// use tokio_serde_json::{ReadJson, WriteJson};
 use tokio_serde_json::ReadJson;
 use errors::*;
 use db::*;
@@ -61,7 +65,7 @@ pub struct DataPoint {
 }
 
 /// Process a socket
-fn process(socket: TcpStream, handle: &Handle) {
+fn process(socket: TcpStream, _addr: SocketAddr, handle: &Handle) {
     // delimit frames using a length header
     let length_delimited = length_delimited::FramedRead::new(socket);
 
@@ -76,7 +80,18 @@ fn process(socket: TcpStream, handle: &Handle) {
                 insert_dataset(plot_id, data[0], data[1]).unwrap();
                 print_data(1).unwrap();
             }
-            Message::Request(Request { req }) => println!("{:?}", req),
+            Message::Request(Request { req: _req }) => {
+                // println!("{:?}: {:?}", socket, req);
+                // let ld = length_delimited::FramedWrite::new(socket);
+                // let serialized = WriteJson::new(ld);
+                // serialized.send(json!({
+                // "plot_id": 1_u32,
+                // "data": [
+                //     1,
+                //     2
+                // ]
+                // }));
+            }
         }
         Ok(())
     }));
@@ -91,8 +106,8 @@ fn run() -> Result<()> {
 
     println!("Listening on {:?}", listener.local_addr());
 
-    core.run(listener.incoming().for_each(|(socket, _)| {
-        process(socket, &handle);
+    core.run(listener.incoming().for_each(|(socket, addr)| {
+        process(socket, addr, &handle);
         Ok(())
     })).unwrap();
     Ok(())
